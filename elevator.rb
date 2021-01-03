@@ -23,10 +23,24 @@ class Elevator
   end
 
   def process
-    # Process all queues
+    while @queues.keys.length.positive?
+      go_up
+      go_down
+    end
+
+    # Return to ground floor
+    @floor_history.push 0
+  end
+
+  def go_up
+    # Process elevator going up
+  end
+
+  def go_down
+    # Process elevator going down
   end
 
   def history
-    []
+    @floor_history
   end
 end
