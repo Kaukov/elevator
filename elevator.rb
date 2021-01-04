@@ -5,13 +5,29 @@ require 'pry'
 # Elevator path and floor history calculation
 class Elevator
   def initialize(queues, capacity, debug: false)
+    # Instance debug flag
     @debug = debug
+
+    # The floor history of the elevator. Always starts with the ground floor
     @floor_history = [0]
+
+    # The total capacity of the elevator.
     @capacity = capacity
+
+    # Properly formatted queues waiting for the elevator
     @queues = hash_queues queues
+
+    # The direction the elevator is going - 1 is up, 0 is down
     @direction = 1
+
+    # Keep track of the current floor the elevator is on
     @current_floor = 0
+
+    # The elevator itself - store each person's destination as key, and the number
+    # of people for that same destination as an integer value to that key
     @elevator = {}
+
+    # The max possible floor a person can go to
     @max_floor = queues.length
   end
 
