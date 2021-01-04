@@ -26,6 +26,8 @@ class Elevator
   end
 
   def process
+    print_debug 'Processing queue...'
+
     while @queues.keys.length.positive?
       go_up
       go_down
@@ -84,6 +86,8 @@ class Elevator
   # can enter the elevator
   # @return [void]
   def process_floor
+    print_debug "Current floor: #{@current_floor}"
+
     # Check if there's someone who can leave the elevator at the @current_floor
     can_leave_elevator
 
@@ -102,6 +106,8 @@ class Elevator
 
       # Add the index to the indexes_to_delete array
       indexes_to_delete.push index
+
+      print_debug 'After queueing valid item', @queues[@current_floor.to_s]
     end
 
     # Delete items from the @queues[@current_floor] if indexes_to_delete is not empty
@@ -115,9 +121,13 @@ class Elevator
     # Add the @current_floor to the @floor_history
     add_to_floor_history @current_floor
 
+    print_debug "At least 1 person can leave on current floor (#{@current_floor})"
+
     # Increase the capacity of the elevator by the number of people who got off
     # the elevator on the @current_floor
     @capacity += @elevator[@current_floor.to_s]
+
+    print_debug "Elevator capacity: #{@capacity}"
 
     # Delete the @current_floor key from @elevator since no people are
     # now queued for that floor
@@ -149,6 +159,8 @@ class Elevator
   # @param [Numeric] floor - The @elevator floor to add someone for
   # @return [void]
   def add_to_elevator(floor)
+    print_debug "#{floor} entered the elevator"
+
     # Increase the floor count of the @elevator[floor] if there's already someone queued for the floor
     @elevator[floor.to_s] += 1 if @elevator[floor.to_s]
 
@@ -157,6 +169,8 @@ class Elevator
 
     # Reduce the available @capacity by 1
     @capacity -= 1
+
+    print_debug "Remaining elevator capacity: #{@capacity}"
   end
 
   # Delete the specified indexes from a given floor
@@ -168,6 +182,8 @@ class Elevator
     # and delete each index from @queues[floor]
     indexes.reverse.each { |index| @queues[floor.to_s]&.delete_at index }
 
+    print_debug 'After queueing valid item', @queues[@current_floor.to_s]
+
     # Delete the @current_floor key from @queues if the queue length is zero
     # after index deletion
     @queues.delete @current_floor.to_s if @queues[@current_floor.to_s].length.zero?
@@ -178,10 +194,18 @@ class Elevator
   # @param [Numeric] floor - The floor to add to the @floor_history
   # @return [void]
   def add_to_floor_history(floor)
+    print_debug "Adding #{floor} to floor history if it's not already there (as last inserted)"
+
     @floor_history.push floor unless @floor_history.last == floor
   end
 
   def history
     @floor_history
+  end
+
+  def print_debug(*items)
+    return unless @debug
+
+    items.each { |item| p item }
   end
 end
