@@ -17,11 +17,11 @@ class Elevator
     @direction = 1
 
     @last_floor = queues.length - 1
+
+    @technician_inside = -1
   end
 
   def process
-    # Go up or down, change direction, skip floors there's no one queued for/on
-
     until @queues.keys.length.zero? && @elevator.length.zero?
       process_current_floor
 
@@ -57,7 +57,6 @@ class Elevator
 
     return unless @queues[@current_floor.to_s]
 
-    deleted_items_from_queue = 0
     queue_items_delete = []
 
     @queues[@current_floor.to_s].each_with_index do |item, index|
@@ -69,9 +68,7 @@ class Elevator
 
       @elevator << item
 
-      # @queues[@current_floor.to_s].delete_at index - deleted_items_from_queue
-
-      # deleted_items_from_queue += 1
+      @technician_inside = item.abs if item.negative?
 
       queue_items_delete << index
     end
@@ -82,6 +79,13 @@ class Elevator
   end
 
   def change_floor
+    unless @technician_inside.negative?
+      @current_floor = @technician_inside
+      @technician_inside = -1
+
+      return
+    end
+
     @current_floor += 1 if @direction.positive?
     @current_floor -= 1 if @direction.zero?
   end

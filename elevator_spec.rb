@@ -22,6 +22,9 @@ describe Elevator do
       debug: false },
     { queues: [[], [0, 3, 3, 5, 5, 5], [], [0, 0, 2, 2, 5, 5, 5], [2], [3], [0, 0, 0, 4, 4, 4]],
       answer: [0, 1, 3, 5, 6, 5, 4, 3, 2, 1, 0, 3, 5, 6, 5, 4, 3, 2, 0],
+      debug: false },
+    { queues: [[], [2, 2], [1, 0, -5], [1, 4, 4], [2], []],
+      answer: [0, 1, 2, 5, 4, 3, 2, 1, 0, 3, 4, 0],
       debug: false }
   ].each do |example|
     it "solves #{example[:queues]} with #{example[:answer]}" do
