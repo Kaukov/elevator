@@ -61,11 +61,11 @@ class Elevator
     queue_items_delete = []
 
     @queues[@current_floor.to_s].each_with_index do |item, index|
-      break unless @elevator.length <= @capacity
-
       next unless item.abs > @current_floor && @direction == 1 || item.abs < @current_floor && @direction.zero?
 
       add_historical_floor @current_floor
+
+      break unless @elevator.length < @capacity
 
       @elevator << item
 
